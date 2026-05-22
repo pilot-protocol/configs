@@ -1,5 +1,8 @@
 # configs
 
+[![ci](https://github.com/pilot-protocol/configs/actions/workflows/ci.yml/badge.svg)](https://github.com/pilot-protocol/configs/actions/workflows/ci.yml)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
 Pilot Protocol shipped configurations — the canonical operational JSON
 the daemon, gateway, and rendezvous ship to operators, plus the
 network blueprint catalog deployed to the production rendezvous.
@@ -38,3 +41,7 @@ See [`networks/SHIPPED.md`](networks/SHIPPED.md) for the full index
 and current deployment state. Every blueprint here is round-tripped
 through `LoadBlueprint` at test time, and `apply-networks.yml`
 auto-provisions changes to the production rendezvous on push.
+
+## License
+
+AGPL-3.0-or-later. See [LICENSE](LICENSE).
