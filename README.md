@@ -1,7 +1,8 @@
 # configs
 
-Pilot Protocol shipped configurations. The canonical operational
-JSON the daemon and rendezvous ship to operators.
+Pilot Protocol shipped configurations — the canonical operational JSON
+the daemon, gateway, and rendezvous ship to operators, plus the
+network blueprint catalog deployed to the production rendezvous.
 
 ## Layout
 
@@ -11,8 +12,8 @@ JSON the daemon and rendezvous ship to operators.
 | `gateway.json` | Reference `pilot-gateway` config — alias mappings, port allocations. |
 | `rendezvous.json` | Reference `pilot-rendezvous` config — beacon coords, listen, store. |
 | `networks/` | The shipped network policy catalog — one `.json` per blueprint. |
-| `networks/SHIPPED.md` | Index of which blueprints are live in the production rendezvous. |
-| `sim/` | Traffic simulator scenarios (default, stress-smoke). |
+| `networks/SHIPPED.md` | Index of every blueprint deployed to the production registry. |
+| `sim/` | Traffic simulator scenarios (`default.json`, `stress-smoke.json`). |
 
 ## Network blueprints
 
@@ -22,16 +23,18 @@ JSON the daemon and rendezvous ship to operators.
 - `rules` (or `expr_policy`) — admission / event policy
 - Optional defaults: `max_nodes`, `trust_decay_rate`, `discovery_mode`, etc.
 
-The protocol repo's `pkg/registry/wire` package and the
-`pilot-protocol/policy` plugin parse these. Integration tests in
-`pilot-protocol/web4` (`tests/zz_provision_shipped_test.go`, etc.)
-verify that every blueprint in this catalog round-trips through
-`LoadBlueprint` cleanly.
+The catalog ships 50 blueprints across three families:
 
-## Live vs. shipped
+- **Open-data networks** (`science`, `geo`, `weather`, `news`, `finance`,
+  `dev`, `transit`, `sports`, …) — default-allow, open-join service nets.
+- **Reputation / membership policies** (`trust-decay`,
+  `high-trust-society`, `dunbar-150`, `aristocracy`, `meritocracy`,
+  `ostracism`, `cold-shoulder`, …) — programmable `expr_policy`
+  blueprints exercising different trust and eviction dynamics.
+- **Reference networks** (`data-exchange-policy`) — canonical
+  service-tag pattern used as inspiration for the open-data set.
 
-Only **3 of the 51 blueprints** are currently active in the
-production rendezvous: `trust-decay`, `high-trust-society`,
-`data-exchange-policy`. The rest are catalog entries that can be
-provisioned on demand. See `networks/SHIPPED.md` for the canonical
-list.
+See [`networks/SHIPPED.md`](networks/SHIPPED.md) for the full index
+and current deployment state. Every blueprint here is round-tripped
+through `LoadBlueprint` at test time, and `apply-networks.yml`
+auto-provisions changes to the production rendezvous on push.
